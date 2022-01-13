@@ -1,0 +1,69 @@
+# =========================== Basic Settings ===========================
+# machine info
+num_gpus_per_job: 1  # number of gpus each job need
+num_cpus_per_job: 8  # number of gpus each job need
+num_hosts_per_job: 1
+memory_per_job: 32  # number of gpus each job need
+# gpu_type: 'nvidia-tesla-p100'
+
+# parameters
+name: places2_gated_conv_v100  # any name
+# model_restore: 'logs/npy_whole_2'  # logs/places2_gated_conv
+model_restore: 'logs/npy_whole_crop'  # logs/places2_gated_conv
+# model_restore: ''  # logs/places2_gated_conv
+# dataset: 'places2'  # 'tmnist', 'dtd', 'places2', 'celeba', 'imagenet', 'cityscapes'
+dataset: 'npy_whole'  # 'tmnist', 'dtd', 'places2', 'celeba', 'imagenet', 'cityscapes'
+
+random_crop: False  # Set to false when dataset is 'celebahq', meaning only resize the images to img_shapes, instead of crop img_shapes from a larger raw image. This is useful when you train on images with different resolutions like places2. In these cases, please set random_crop to true.
+val: False  # true if you want to view validation results in tensorboard
+
+# log_dir: logs/places2_2000
+log_dir: logs/npy_whole_crop
+# log_dir: logs/npy_whole_2
+
+gan: 'sngan'
+gan_loss_alpha: 1
+gan_with_mask: True
+discounted_mask: True
+random_seed: False
+padding: 'SAME'
+
+# training
+train_spe: 4000
+max_iters: 100000000
+viz_max_out: 50
+val_psteps: 2000
+
+# data
+data_flist:
+  # https://github.com/jiahuiyu/progressive_growing_of_gans_tf
+  
+  npy_whole: [
+    'train_root',
+    'valid_root',
+  ]
+  
+  # http://www.image-net.org/, please use random_crop: True
+  imagenet: [
+    'data/imagenet/train_shuffled.flist',
+    'data/imagenet/validation_static_view.flist',
+  ]
+
+static_view_size: 30
+img_shapes: [512, 512, 3]
+height: 128
+width: 128
+max_delta_height: 32
+max_delta_width: 32
+batch_size: 8
+vertical_margin: 0
+horizontal_margin: 0
+
+# loss
+ae_loss: True
+l1_loss: True
+l1_loss_alpha: 1.
+
+# to tune
+guided: False
+edge_threshold: 0.6
